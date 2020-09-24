@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\WantedPersonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,13 +13,29 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/wanted-persons", name="api", methods={"POST"})
      */
-    public function query(Request $request)
+    public function query(Request $request, WantedPersonRepository $wantedPersonRepository)
     {
-        // TODO: initiate repo, grab users by the fullName, return
+        $response = [];
 
-        return new JsonResponse(['queryReturn' => [
-            'person1' => 'Jeff',
-            'person2' => 'Bill',
-        ]]);
+        $data = json_decode($request->getContent(), true);
+        if (!empty($data['fullName'])) {
+            $wantedPersonObjects = $wantedPersonRepository->findBy(
+                ['fullName' => $data['fullName']]
+            );
+
+            foreach ($wantedPersonObjects as $object) {
+                $response[] = [
+                    'id' => $object->getId(),
+                    'fullName' => $object->getFullName(),
+                    'comment' => $object->getComment(),
+                    'externalId' => $object->getExternalId(),
+                    'fullInformation' => $object->getFullInformation(),
+                    'source' => $object->getSource(),
+                    'createdAt' => $object->getCreatedAt(),
+                ];
+            }
+        }
+
+        return new JsonResponse($response);
     }
 }
