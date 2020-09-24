@@ -73,13 +73,13 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     {
         $data = [
             // you may want to customize or obfuscate the message first
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
+            'message' => 'Forbidden'
 
             // or to translate this message
             // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
         ];
 
-        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
+        return new JsonResponse($data, Response::HTTP_FORBIDDEN);
     }
 
     /**

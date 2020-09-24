@@ -12,13 +12,13 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/wanted-persons", name="api", methods={"POST"})
      */
-    public function index(Request $request)
+    public function query(Request $request)
     {
-        $token = $request->headers->get('X-API-KEY');
-        if (empty($token)) {
-            return new JsonResponse(null, 403);
-        }
-            // $a = 'b'; $request->headers->get('X-API-KEY');
-        return new JsonResponse(['person' => 'is ithis  the one']);
+        // TODO: initiate repo, grab users by the fullName, return
+
+        return new JsonResponse(['queryReturn' => [
+            'person1' => 'Jeff',
+            'person2' => 'Bill',
+        ]]);
     }
 }
